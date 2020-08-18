@@ -56,6 +56,11 @@
                                         </a>
                                     </p>
                                 @endif
+                                <p class="text-center" style="margin-top: -10px;">
+                                    <a href="{{ route('register') }}">
+                                        Do not have account? Click Here
+                                    </a>
+                                </p>
                             </form>
                         </div>
                     </div>

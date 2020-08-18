@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Mail\TransactionSuccess;
 use Illuminate\Http\Request;
 use App\TransactionDetail;
 use App\TravelPackage;
 use App\Transaction;
 use Carbon\Carbon;
+use Mail;
 
 class CheckoutController extends Controller
 {
@@ -77,9 +79,11 @@ class CheckoutController extends Controller
 
     public function success(Request $request, $id)
     {
-        $transaction = Transaction::findOrFail($id);
+        $transaction = Transaction::with(['details', 'travel_package.galleries', 'user'])->findOrFail($id);
         $transaction->transaction_status = 'PENDING';
         $transaction->save();
+        // kirim email
+        Mail::to($transaction->user)->send(new TransactionSuccess($transaction));
         return view('pages.success');
     }
 }

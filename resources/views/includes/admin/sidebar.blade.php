@@ -17,6 +17,12 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('role') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Role</span></a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('travel-package.index') }}">
             <i class="fas fa-fw fa-hotel"></i>

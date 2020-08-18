@@ -5,6 +5,12 @@ body {
 }
 
 // Navbar
+.sticky {
+  top: 0;
+  position: fixed;
+  z-index: 100;
+}
+
 .navbar-brand {
   img {
     max-height: 40px;
@@ -46,7 +52,7 @@ body {
 
 // Header
 header {
-  padding: 182px 0 135px;
+  padding: 180px 0 165px;
   margin-top: -70px;
   background-image: url("../images/Banner.jpg");
   background-size: cover;
@@ -131,11 +137,57 @@ header {
 }
 
 .section-popular-content {
+  .btn-more-travel {
+    border-color: #eaad11;
+    border-width: 2px;
+    color: #eaad11;
+    font-size: 18px;
+
+    &:hover {
+      border-color: #f0bd3b;
+      color: #f0bd3b;
+    }
+  }
+
+  .carousel-indicators{
+    bottom: -5px;
+
+    li {
+      background-color: #2c21aa;
+    }
+    li.active {
+      background-color: #f0bd3b;
+    }
+  }
+
+  #carouselNomads{
+    .sr-only {
+      color: #2c21aa;
+    }
+
+    .carousel-control-prev {
+      color: #f0bd3b;
+    }
+
+    .carousel-control-next {
+      color: #f0bd3b;
+    }
+  }
+
   .section-popular-travel {
     .card-travel {
       min-height: 380px;
       color: #ffffff;
       background-color: #000000;
+      padding: 30px 0 30px;
+      background-size: cover;
+      margin-bottom: 20px;
+    }
+
+    .first-card-travel {
+      min-height: 180px;
+      color: #ffffff;
+      background-color: transparent;
       padding: 30px 0 30px;
       background-size: cover;
       margin-bottom: 20px;

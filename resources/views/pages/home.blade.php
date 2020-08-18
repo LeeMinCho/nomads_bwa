@@ -54,19 +54,50 @@
     </section>
     <section class="section-popular-content" id="popular-content">
         <div class="container">
-            <div class="section-popular-travel row justify-content-center">
+            @if ($items)
+            <div id="carouselNomads" class="carousel section-popular-travel slide carousel-multi-item" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselNomads" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselNomads" data-slide-to="1"></li>
+                    <li data-target="#carouselNomads" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
                 @foreach ($items as $item)
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card-travel text-center d-flex flex-column" style="background-image: url('{{ $item->galleries->count() ? Storage::url($item->galleries->first()->image) : '' }}');">
-                        <div class="travel-country">{{ $item->location }}</div>
-                        <div class="travel-location">{{ $item->title }}</div>
-                        <div class="travel-button mt-auto">
-                            <a href="{{ route('detail', $item->slug) }}" class="btn btn-travel-details px-4">View Details</a>
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card-travel text-center d-flex flex-column" style="background-image: url('{{ $item->galleries->count() ? Storage::url($item->galleries->first()->image) : '' }}');">
+                                    <div class="travel-country">{{ $item->location }}</div>
+                                    <div class="travel-location">{{ $item->title }}</div>
+                                    <div class="travel-button mt-auto">
+                                        <a href="{{ route('detail', $item->slug) }}" class="btn btn-travel-details px-4">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
+                </div>
+                <a class="carousel-control-prev" href="#carouselNomads" role="button" data-slide="prev">
+                    <span class="fas fa-angle-left fa-3x" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselNomads" role="button" data-slide="next">
+                    <span class="fas fa-angle-right fa-3x" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
+            <div class="text-center mt-3 mb-3">
+                <a href="#" class="btn btn-more-travel">More Travel</a>
+            </div>
+            @else
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="first-card-travel text-center d-flex flex-column">
+                    </div>
+                </div>
+            </div>    
+            @endif
         </div>
     </section>
 
@@ -166,3 +197,22 @@
     </section>
 </main>
 @endsection
+
+@push('addon-style')
+    <link rel="stylesheet" href="{{ url('backend/vendor/fontawesome-free/css/all.min.css') }}">
+@endpush
+
+@push('addon-script')
+    <script>
+        document.querySelectorAll("a[href^='#']").forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth',
+                    timer: 2500
+                });
+            });
+        });
+    </script>
+@endpush
