@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\TravelPackage;
+use Yajra\DataTables\DataTables;
 
 class TravelPackageController extends Controller
 {
@@ -21,6 +22,16 @@ class TravelPackageController extends Controller
         return view('pages.admin.travel-package.index', [
             'items' => $items
         ]);
+    }
+
+    public function travelPackageDatatable()
+    {
+        $travelPackage = TravelPackage::query();
+        return DataTables::of($travelPackage)
+            ->addColumn('action', function ($travelPackage) {
+                return '<button id="show-travel-package" data-id="' . $travelPackage->id . '" class="btn btn-primary" title="Show Detail"><i class="fas fa-eye"></i></button> <button id="edit-travel-package" data-id="' . $travelPackage->id . '" class="btn btn-info" title="Edit"><i class="fas fa-edit"></i></button>';
+            })
+            ->make(true);
     }
 
     /**
@@ -45,7 +56,7 @@ class TravelPackageController extends Controller
         $data['slug'] = Str::slug($request->title);
 
         TravelPackage::create($data);
-        return redirect()->route('travel-package.index');
+        return response(['message' => 'Success create new data']);
     }
 
     /**
@@ -56,7 +67,8 @@ class TravelPackageController extends Controller
      */
     public function show($id)
     {
-        //
+        $travelPackage = TravelPackage::findOrFail($id);
+        return response($travelPackage);
     }
 
     /**
@@ -87,7 +99,7 @@ class TravelPackageController extends Controller
         $item = TravelPackage::findOrFail($id);
         $item->update($data);
 
-        return redirect()->route('travel-package.index');
+        return response(['message' => 'Success update data']);
     }
 
     /**

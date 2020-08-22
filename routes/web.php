@@ -42,9 +42,14 @@ Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/', 'DashboardController@index')->name('dashboard');
+        Route::get('role-datatable', 'RoleController@roleDatatable')->name('role-datatable');
+        Route::get('user-datatable', 'UserController@userDatatable')->name('user-datatable');
+        Route::get('travel-package-datatable', 'TravelPackageController@travelPackageDatatable')->name('travel-package-datatable');
         Route::resource('travel-package', 'TravelPackageController');
         Route::resource('gallery', 'GalleryController');
         Route::resource('transaction', 'TransactionController');
+        Route::resource('role', 'RoleController');
+        Route::resource('user', 'UserController');
     });
 
 Auth::routes(['verify' => true]);

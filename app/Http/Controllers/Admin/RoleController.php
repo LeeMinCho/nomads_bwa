@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\RoleRequest;
 use App\Http\Controllers\Controller;
-use App\Role;
+use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
+use App\Role;
 
 class RoleController extends Controller
 {
@@ -15,7 +17,17 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.admin.role.index');
+    }
+
+    public function roleDatatable()
+    {
+        $role = Role::query();
+        return DataTables::of($role)
+            ->addColumn('action', function ($role) {
+                return '<button id="edit-role" data-id="' . $role->id . '" class="btn btn-info"><i class="fas fa-edit"></i></button>';
+            })
+            ->make(true);
     }
 
     /**
@@ -25,7 +37,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.role.create');
     }
 
     /**
@@ -34,9 +46,11 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        $data = $request->all();
+        Role::create($data);
+        return response(['message' => 'Success create new data!']);
     }
 
     /**
@@ -45,9 +59,10 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        //
+        $role = Role::findOrFail($id);
+        return response($role);
     }
 
     /**
@@ -56,7 +71,7 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
         //
     }
@@ -68,9 +83,12 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $role = Role::findOrFail($id);
+        $role->update($data);
+        return response(['message' => 'Success update data']);
     }
 
     /**
