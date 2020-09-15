@@ -87,7 +87,7 @@
                     error: function (xhr, textStatus, error) {
                         var response = xhr.responseJSON;
                         if (xhr.status == 422) {
-                            $("#role").parents(".form-group").find(".error").html("<span class='text text-danger'>" + response.errors.role + "</span>");
+                            $("#role").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.role ? response.errors.role : "") + "</span>");
                         }
                     }
                 }).done(function (data) {

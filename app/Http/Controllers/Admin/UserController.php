@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\UserRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use App\UserAdmin;
-use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -53,9 +55,16 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $data['email'] = $request->email;
+        $data['password'] = Hash::make($request->password);
+        $data['name'] = $request->name;
+        $data['roles_id'] = 1;
+        $data['username'] = '';
+        $data['email_verified_at'] = date("Y-m-d H:i:s");
+        UserAdmin::create($data);
+        return response(['message' => 'Success create new data!']);
     }
 
     /**

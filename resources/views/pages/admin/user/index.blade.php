@@ -65,8 +65,15 @@
                 <div class="error"></div>
             </div>
             <div class="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password">
+                <label for="password_confirmation">Password Confirmation</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Password Confirmation">
+                <div class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="roles_id">Role</label>
+                <select name="roles_id" class="form-control select2" id="roles_id" placeholder="Pilih">
+                    <option value="">Pilih</option>
+                </select>
                 <div class="error"></div>
             </div>
         </div>
@@ -85,31 +92,74 @@
         $(document).ready(function () {
             userDatatable();
 
+            $("#roles_id").each(function () {
+                $(this).select2({
+                    theme: 'bootstrap4',
+                    width: 'style',
+                    placeholder: $(this).attr('placeholder'),
+                    allowClear: true,
+                    ajax: {
+                        url: "{{ route("role-select") }}",
+                        dataType: "json",
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                q: params.term
+                            };
+                        },
+                        processResults: function(data) {
+                            let results = [];
+                            $.each(data.role, function(index, item) {
+                                results.push({
+                                    id: item.id,
+                                    text: item.role
+                                });
+                            });
+                            return {
+                                results: results
+                            };
+                        }
+                    }
+                });
+            });
+
             $("#add-user").on("click", function () {
-                $("#id").val("");
                 $(".error").html("");
+                $("#email").val("");
+                $("#name").val("");
+                $("#password").val("");
+                $("#password_confirmation").val("");
+                $("#roles_id").val(null).trigger("change");
                 $("#modalUser").find(".modal-title").html("Add User");
                 $("#modalUser").find("#create-user").show();
                 $("#modalUser").find("#update-user").hide();
                 $("#modalUser").modal("show");
             });
 
-            $("#create-role").click(function () {
+            $("#create-user").click(function () {
                 $.ajax({
-                    url: "{{ route("role.store") }}",
+                    url: "{{ route("user.store") }}",
                     type: "POST",
                     data: {
-                        "role": $("#role").val()
+                        "email": $("#email").val(),
+                        "name": $("#name").val(),
+                        "password": $("#password").val(),
+                        "password_confirmation": $("#password_confirmation").val(),
+                        "roles_id": $("#roles_id").val(),
                     },
                     dataType: "json",
                     error: function (xhr, textStatus, error) {
                         var response = xhr.responseJSON;
                         if (xhr.status == 422) {
-                            $("#role").parents(".form-group").find(".error").html("<span class='text text-danger'>" + response.errors.role + "</span>");
+                            $("#email").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.email ? response.errors.email : "") + "</span>");
+                            $("#name").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.name ? response.errors.name : "") + "</span>");
+                            $("#password").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.password ? response.errors.password : "") + "</span>");
+                            $("#password_confirmation").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.password_confirmation ? response.errors.password_confirmation : "") + "</span>");
+                            $("#roles_id").parents(".form-group").find(".error").html("<span class='text text-danger'>" + (response.errors.roles_id ? response.errors.roles_id : "") + "</span>");
                         }
                     }
                 }).done(function (data) {
-                    $("#modalRole").modal("hide");
+                    $("#modalUser").modal("hide");
                     Swal.fire({
                         icon: "success",
                         title: "Success",
@@ -118,7 +168,7 @@
                         showConfirmButton: false,
                     });
                     setTimeout(function () {
-                        roleDatatable();
+                        userDatatable();
                     }, 2500);
                 });
             });
@@ -210,7 +260,7 @@
                     { data: 'role.role', name: 'role.role' },
                     { data: 'action', name: 'action', orderable: false },
                 ],
-                order: [[1, 'desc']],
+                order: [[3, 'desc']],
                 rowCallback: function(row, data, iDisplayIndex) {
                     var info = this.fnPagingInfo();
                     var page = info.iPage;

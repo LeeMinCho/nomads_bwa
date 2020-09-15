@@ -45,6 +45,9 @@ Route::prefix('admin')
         Route::get('role-datatable', 'RoleController@roleDatatable')->name('role-datatable');
         Route::get('user-datatable', 'UserController@userDatatable')->name('user-datatable');
         Route::get('travel-package-datatable', 'TravelPackageController@travelPackageDatatable')->name('travel-package-datatable');
+        Route::get('gallery-datatable', 'GalleryController@galleryDatatable')->name('gallery-datatable');
+        Route::get('role-select', 'RoleController@roleSelect')->name('role-select');
+        Route::get('travel-package-select', 'TravelPackageController@travelPackageSelect')->name('travel-package-select');
         Route::resource('travel-package', 'TravelPackageController');
         Route::resource('gallery', 'GalleryController');
         Route::resource('transaction', 'TransactionController');

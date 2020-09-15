@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\GalleryRequest;
 use App\Http\Controllers\Controller;
+use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\TravelPackage;
 use App\Gallery;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
@@ -18,10 +20,21 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $items = Gallery::with(['travel_package'])->get();
-        return view('pages.admin.gallery.index', [
-            'items' => $items
-        ]);
+        return view('pages.admin.gallery.index');
+    }
+
+    public function galleryDatatable()
+    {
+        $gallery = Gallery::query()->with(['travel_package']);
+        return DataTables::of($gallery)
+            ->addColumn('action', function ($gallery) {
+                return '<button id="delete-gallery" data-id="' . $gallery->id . '" class="btn btn-danger"><i class="fas fa-trash"></i></button>';
+            })
+            ->editColumn('image', function ($gallery) {
+                return '<img src="' . Storage::url($gallery->image) . '" class="img-fluid img-thumbnail" />';
+            })
+            ->escapeColumns(['created_at'])
+            ->make(true);
     }
 
     /**
@@ -104,9 +117,11 @@ class GalleryController extends Controller
      */
     public function destroy($id)
     {
-        $item = Gallery::findOrFail($id);
-        $item->delete();
+        // $item = Gallery::findOrFail($id);
+        // $item->delete();
 
-        return redirect()->route('gallery.index');
+        return response([
+            'message' => 'Data has been deleted!'
+        ]);
     }
 }

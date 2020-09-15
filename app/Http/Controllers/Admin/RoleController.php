@@ -30,6 +30,16 @@ class RoleController extends Controller
             ->make(true);
     }
 
+    /*
+    Display List Role 
+    */
+    public function roleSelect(Request $request)
+    {
+        return response([
+            'role' => Role::where("role", "like", "%" . $request->q . "%")->limit(10)->get()
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

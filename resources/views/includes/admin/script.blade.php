@@ -5,6 +5,9 @@
 <!-- Core plugin JavaScript-->
 <script src="{{ url('backend/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
+<!-- Select2 -->
+<script src="{{ url('backend/vendor/select2/js/select2.full.min.js') }}"></script>
+
 <!-- Sweet Alert 2 -->
 <script src="{{ url('backend/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 

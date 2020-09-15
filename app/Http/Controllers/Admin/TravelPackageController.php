@@ -34,6 +34,13 @@ class TravelPackageController extends Controller
             ->make(true);
     }
 
+    public function travelPackageSelect(Request $request)
+    {
+        return response([
+            'travel_package' => TravelPackage::where("location", "like", "%" . $request->q . "%")->limit(10)->get()
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
